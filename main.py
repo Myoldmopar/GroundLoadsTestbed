@@ -81,8 +81,14 @@ if __name__ == "__main__":
     hp_eft_yes = l.heat_pump_inlet_temp_history
     ghe_eft_yes = l.glhe_inlet_temp_history
     with (output_folder / 'outputs.csv').open('w') as f:
-        f.write(f"Q_ground_no,Q_ground_yes,HP_EFT_no,HP_EFT_yes,GHE_EFT_no,GHE_EFT_yes\n")
+        f.write(f"Index,Q_ground_no,Q_ground_yes,HP_EFT_no,HP_EFT_yes,GHE_EFT_no,GHE_EFT_yes\n")
+        ind = 0
         for args in zip(ground_loads_no_effectiveness, ground_loads_with_effectiveness, hp_eft_no, hp_eft_yes, ghe_eft_no, ghe_eft_yes):
-            for a in args:
-                f.write(f"{a},")
+            ind += 1
+            f.write(f"{ind},")
+            for i, a in enumerate(args):
+                if i < len(args) - 1:
+                    f.write(f"{a},")
+                else:
+                    f.write(f"{a}")
             f.write("\n")
