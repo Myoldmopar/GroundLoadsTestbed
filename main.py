@@ -1,5 +1,6 @@
 from pathlib import Path
 from random import random
+from scp.water import Water
 
 
 repo_root = Path(__file__).resolve().parent
@@ -49,9 +50,11 @@ class Loop:
         self.heat_pump_inlet_temp_history = []
         self.glhe_inlet_temp = initial_loop_temp
         self.glhe_inlet_temp_history = []
-        self.mass_flow_rate = 20
-        self.cp = 4200
+        self.cp = Water().specific_heat(initial_loop_temp)
         self.hp = HeatPump()
+        peak_building_load = max([abs(x) for x in self.hp.building_loads])
+        nice_delta_t = 20
+        self.mass_flow_rate = peak_building_load / (self.cp * nice_delta_t)
         self.glhe = GLHE(use_effectiveness=glhe_effectiveness)
         self.hour_index = -1
     
